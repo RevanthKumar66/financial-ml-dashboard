@@ -182,6 +182,54 @@ st.markdown("""
         background-color: #E9ECEF;
         margin: 5px 0px; /* Kept tight for sidebar */
     }
+
+    /* --- RESPONSIVE ADAPTATIONS --- */
+    @media (max-width: 1024px) {
+        div[data-testid="stMetricValue"] { font-size: 1.2rem !important; }
+        .pipeline-card { height: 140px; }
+    }
+
+    @media (max-width: 768px) {
+        h1 { font-size: 1.8rem !important; }
+        h2 { font-size: 1.5rem !important; }
+        h3 { font-size: 1.3rem !important; }
+        h4 { font-size: 1.1rem !important; }
+        
+        div[data-testid="stMetric"] {
+            min-height: 80px !important;
+            padding: 10px !important;
+        }
+        div[data-testid="stMetricValue"] { font-size: 1.1rem !important; }
+        
+        .pipeline-card { 
+            height: auto !important; 
+            margin-bottom: 10px;
+        }
+        
+        /* Improve button sizes for touch targets */
+        .stButton>button {
+            padding: 10px 15px !important;
+            font-size: 0.9rem !important;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 { font-size: 1.5rem !important; }
+        .main .block-container {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+        
+        /* Stack components that might be too wide */
+        div[data-testid="stHorizontalBlock"] {
+            flex-direction: column !important;
+        }
+        div[data-testid="column"] {
+            width: 100% !important;
+            flex: 1 1 100% !important;
+            margin-bottom: 1rem;
+        }
+    }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 """, unsafe_allow_html=True)

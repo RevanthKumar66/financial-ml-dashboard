@@ -1,0 +1,13 @@
+pandas
+numpy
+scikit-learn
+statsmodels
+streamlit
+plotly
+matplotlib
+seaborn
+scipy
+streamlit-option-menu
+streamlit-extras
+streamlit-card
+streamlit-aggrid

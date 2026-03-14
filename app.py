@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
+import os
 import seaborn as sns
 import matplotlib.pyplot as plt
 from datetime import datetime
@@ -213,14 +214,27 @@ with st.sidebar:
     company = st.selectbox("Select Portfolio Company", ["Greggs", "Tesco"], index=1, label_visibility="collapsed")
     
     # Logic to determine raw_data
-    if uploaded_file is not None and process_btn:
-        try:
-            raw_data = pd.read_csv(uploaded_file)
-        except Exception:
+    if uploaded_file is not None:
+        if process_btn:
+            try:
+                raw_data = pd.read_csv(uploaded_file)
+                st.sidebar.success("External data ingested successfully.")
+            except Exception as e:
+                st.sidebar.error(f"Ingestion Error: {str(e)}")
+                raw_data = None
+        else:
+            # While file is uploaded but button not clicked, show prompt
             raw_data = None
+            st.sidebar.info("👆 Click RUN ANALYSIS to process uploaded file.")
     else:
         file_map = {"Greggs": "greggs_cleaned.csv", "Tesco": "tesco_cleaned.csv"}
-        raw_data = load_base_data(file_map[company])
+        target_file = file_map[company]
+        
+        if os.path.exists(target_file):
+            raw_data = load_base_data(target_file)
+        else:
+            st.sidebar.error(f"System Error: {target_file} not found in root.")
+            raw_data = None
 
     st.markdown('<div class="thin-divider"></div>', unsafe_allow_html=True)
     

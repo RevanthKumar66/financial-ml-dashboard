@@ -32,6 +32,17 @@ def preprocess_and_feature_engineer(df: pd.DataFrame) -> Tuple[pd.DataFrame, boo
         df_clean = df_clean.sort_index()
         pipeline_steps.append("Mapped 'Date' column to DatetimeIndex and sorted chronologically.")
 
+    # 4. Numeric Conversion & Cleaning (Handing strings with commas like '1,234.56')
+    numeric_cols = ['Open', 'High', 'Low', 'Close', 'Volume', 'Adj close']
+    for col in numeric_cols:
+        if col in df_clean.columns:
+            if df_clean[col].dtype == object:
+                # Remove commas and convert to float
+                df_clean[col] = df_clean[col].astype(str).str.replace(',', '').str.strip()
+            df_clean[col] = pd.to_numeric(df_clean[col], errors='coerce')
+    
+    pipeline_steps.append("Cleaned numeric features (handled currency separators and string conversions).")
+
     # Find Target
     close_col = 'Close'
     if 'Close' not in df_clean.columns:
@@ -44,10 +55,9 @@ def preprocess_and_feature_engineer(df: pd.DataFrame) -> Tuple[pd.DataFrame, boo
     if close_col not in df_clean.columns:
         return df_clean, False, "Missing 'Close' column.", pipeline_steps
     
-    df_clean[close_col] = pd.to_numeric(df_clean[close_col], errors='coerce')
     df_clean = df_clean.dropna(subset=[close_col])
 
-    # 4. Feature Engineering
+    # 5. Feature Engineering
     if 'Ma_4' not in df_clean.columns:
         df_clean['Ma_4'] = df_clean[close_col].rolling(window=4).mean()
         pipeline_steps.append("Generated 4-day Moving Average (Ma_4) feature.")
